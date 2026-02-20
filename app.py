@@ -47,11 +47,10 @@ if prompt := st.chat_input("¿En qué proyecto te ayudo hoy?"):
         st.markdown(prompt)
 
     try:
-        # Forzamos el modelo 1.5-flash para evitar errores de cuota
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Usamos el nombre técnico completo que pide la API v1beta
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
         
-        # Combinamos la instrucción con la pregunta
-        full_query = f"{PROMPT_SISTEMA}\n\nCliente: {prompt}"
+        full_query = f"{PROMPT_SISTEMA}\n\nPregunta del cliente: {prompt}"
         
         response = model.generate_content(full_query)
         
@@ -60,5 +59,13 @@ if prompt := st.chat_input("¿En qué proyecto te ayudo hoy?"):
         st.session_state.messages.append({"role": "assistant", "content": response.text})
         
     except Exception as e:
-        st.error(f"Aviso: El sistema está recibiendo muchas consultas. Por favor, reintentá en un momento.")
-        st.write(f"Error detallado: {e}")
+        # Si falla el anterior, probamos con el nombre corto por las dudas
+        try:
+            model_alt = genai.GenerativeModel('gemini-1.5-flash')
+            response = model_alt.generate_content(f"{PROMPT_SISTEMA}\n\n{prompt}")
+            with st.chat_message("assistant"):
+                st.markdown(response.text)
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
+        except Exception as e2:
+            st.error(f"Error de conexión con Google. Por favor, reintentá en un minuto.")
+            st.write(f"Detalle: {e2}")
