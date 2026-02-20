@@ -45,7 +45,7 @@ if prompt := st.chat_input("¿Qué necesitás instalar?"):
         st.markdown(prompt)
 
     # Respuesta de la IA
-    model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=PROMPT_SISTEMA)
+    model = genai.GenerativeModel('gemini-pro', system_instruction=PROMPT_SISTEMA)
     response = model.generate_content(prompt)
     
     with st.chat_message("assistant"):
