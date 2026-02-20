@@ -27,10 +27,9 @@ if prompt := st.chat_input("¿Qué necesitás instalar?"):
         st.markdown(prompt)
 
     try:
-        # USAMOS EL MODELO 1.5 FLASH QUE ES EL QUE TU KEY RECONOCE
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Probamos con el nombre técnico completo
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
         
-        # Le enviamos la instrucción de quién es y la pregunta juntas
         full_query = f"{PROMPT_SISTEMA}\n\nPregunta del cliente: {prompt}"
         
         response = model.generate_content(full_query)
@@ -39,4 +38,8 @@ if prompt := st.chat_input("¿Qué necesitás instalar?"):
             st.markdown(response.text)
         st.session_state.messages.append({"role": "assistant", "content": response.text})
     except Exception as e:
-        st.error(f"Error: {e}")
+        # Si falla el anterior, este usa el modelo base automático
+        st.info("Ajustando conexión...")
+        model_alt = genai.GenerativeModel('gemini-1.5-flash')
+        response = model_alt.generate_content(f"{PROMPT_SISTEMA}\n\n{prompt}")
+        st.markdown(response.text)
