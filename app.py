@@ -60,3 +60,5 @@ if prompt := st.chat_input("¿En qué proyecto te ayudo hoy?"):
         st.session_state.messages.append({"role": "assistant", "content": response.text})
         
     except Exception as e:
+        st.error(f"Aviso: El sistema está recibiendo muchas consultas. Por favor, reintentá en un momento.")
+        st.write(f"Error detallado: {e}")
