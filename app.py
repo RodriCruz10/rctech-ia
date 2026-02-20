@@ -5,7 +5,7 @@ import google.generativeai as genai
 st.set_page_config(page_title="RC TECH - Asesor IA", page_icon="🛠️")
 
 # PEGÁ ACÁ TU API KEY
-API_KEY = "TU_API_KEY_AQUI" 
+API_KEY = "AIzaSyCS5CXCzrLoGr2FjwgynL0u_1DpCvm9IeE" 
 genai.configure(api_key=API_KEY)
 
 # Instrucciones para la IA
